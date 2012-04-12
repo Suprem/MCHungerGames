@@ -27,7 +27,7 @@ public class HGArenaEditCommand implements CommandExecutor{
         boolean isplayer = sender instanceof Player;
         Player player = isplayer ? (Player) sender : null;
         
-        
+        if(isplayer) PluginInfo.sendPluginInfo(sender.getName()+": "+cmd.getName());
 
         if(cmd.getName().equalsIgnoreCase("hgaedit")){
             try{

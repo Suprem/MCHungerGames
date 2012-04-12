@@ -27,6 +27,8 @@ public class CornucopiaCommand implements CommandExecutor{
         boolean isplayer = sender instanceof Player;
         Player player = isplayer ? (Player) sender : null;
         
+        if(isplayer) PluginInfo.sendPluginInfo(sender.getName()+": "+cmd.getName());
+        
         if(cmd.getName().equalsIgnoreCase("spawnccp")){
             if(isplayer){
                 if(sender.hasPermission(Perms.SPC.perm())){
