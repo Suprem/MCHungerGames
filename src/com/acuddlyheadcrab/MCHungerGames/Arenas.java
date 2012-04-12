@@ -7,6 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import com.acuddlyheadcrab.util.ConfigKeys;
+import com.acuddlyheadcrab.util.Utility;
 
 public class Arenas {
     
@@ -64,8 +65,6 @@ public class Arenas {
     }
     
     public static boolean isInGame(String arenakey){
-        System.out.println("Path: "+getPathType(arenakey,"ingame"));
-        System.out.println("Derp: "+config.getString("Current_games"));
         return config.getBoolean(getPathType(arenakey,"ingame"));
     }
     
@@ -133,6 +132,17 @@ public class Arenas {
         if(type.equalsIgnoreCase("tribs"))return arenapath+ConfigKeys.ARN_TRIBS.key();
         if(type.equalsIgnoreCase("ingame"))return arenapath+ConfigKeys.ARN_INGAME.key();
         if(type.equalsIgnoreCase("self")) return arenapath;
+        return null;
+    }
+    
+    public static boolean isWithinArena(String arenakey, Location loc){
+        if(loc.distance(getCenter(arenakey))<=getMaxDist(arenakey)) return true; 
+        else return false;
+    }
+    
+    public static String getNearbyArena(Location loc){
+        for(String arenakey : Utility.getArenasKeys())
+            if(isWithinArena(arenakey, loc)) return arenakey;
         return null;
     }
     

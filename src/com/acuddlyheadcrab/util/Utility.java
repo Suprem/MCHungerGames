@@ -143,5 +143,13 @@ public class Utility {
         }
         return false;
     }
+
+
+    public static String concatArray(String[] array, String param) {
+        String returnable = "";
+        for(String i : array)
+            returnable = returnable.concat(param+i);
+        return returnable;
+    }
     
 }
