@@ -31,7 +31,7 @@ public class HGGameCommand implements CommandExecutor{
         
         FileConfiguration config = hungergames.getConfig();
         
-        if(sender instanceof Player) PluginInfo.sendPluginInfo(sender.getName()+": "+cmd.getName());
+        if(sender instanceof Player) PluginInfo.sendPluginInfo(sender.getName()+": /"+label+Utility.concatArray(args, " "));
         
         if(cmd.getName().equalsIgnoreCase("hggame")){
             try{

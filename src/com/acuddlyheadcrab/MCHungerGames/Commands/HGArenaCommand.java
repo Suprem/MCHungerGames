@@ -29,7 +29,7 @@ public class HGArenaCommand implements CommandExecutor{
         boolean isplayer = sender instanceof Player;
         Player player = isplayer ? (Player) sender : null;
         
-        if(isplayer) PluginInfo.sendPluginInfo(sender.getName()+": "+cmd.getName());
+        if(isplayer) PluginInfo.sendPluginInfo(sender.getName()+": /"+label+Utility.concatArray(args, " "));
         
         if(cmd.getName().equalsIgnoreCase("hgarena")){
             try{
@@ -110,7 +110,11 @@ public class HGArenaCommand implements CommandExecutor{
                                 sender.sendMessage(main+""+"Arena name: "+value+arenakey+"        ".concat(ingame));
                                 sender.sendMessage(main+"    Cornucopia: "+value+x+", "+y+", "+z+"    ");
                                 sender.sendMessage(main+"    World: "+value+corn.getWorld().getName());
-                                sender.sendMessage(main+"    Limit: "+value+limit);
+                                sender.sendMessage(main+"    MaxDistance: "+value+limit);
+                                if(isplayer){
+                                    int dist = (int) player.getLocation().distance(corn);
+                                    player.sendMessage(main+"    Current distance from center: "+value+dist);
+                                }
                                 sender.sendMessage(main+"    Gamemakers:"+ChatColor.RESET+ChatColor.ITALIC+onlineplayer+"    online"+offlineplayer+"    offline");
                                 sender.sendMessage(gms);
                                 sender.sendMessage(main+"    "+underline+"Tributes:");
