@@ -38,22 +38,30 @@ public class HGListener implements Listener {
         
         if(leaving){
             if(Arenas.isInGame(from_arena)){
-                player.sendMessage(red+"You are not allowed to leave the arena!");
-                event.setCancelled(true);
-                player.teleport(from);
-            } else {
-                player.sendMessage(yellow+"You are now leaving "+gold+from_arena);
+                if(!Arenas.isGM(from_arena, player)){
+                    player.sendMessage(red+"You are not allowed to leave "+from_arena+"!");
+                    event.setCancelled(true);
+                    player.teleport(from);
+                    return;
+//                    so like.... can I turn the player around and "bounce" them off the forcefeild?
+                }
             }
+            if(Arenas.isInGame(from_arena)) player.sendMessage(ChatColor.LIGHT_PURPLE+"("+from_arena+" is currently in game)");
+            player.sendMessage(yellow+"You are now leaving "+gold+from_arena);
         }
         
         if(entering){
             if(Arenas.isInGame(to_arena)){
-                player.sendMessage(red+"You are not allowed to enter this arena!");
-                event.setCancelled(true);
-                player.teleport(from);
-            } else {
-                player.sendMessage(yellow+"You are now entering "+gold+to_arena);
+                if(!Arenas.isGM(to_arena, player)){
+                    player.sendMessage(red+"You are not allowed to enter "+to_arena+"!");
+                    event.setCancelled(true);
+                    player.teleport(from);
+                    return;
+//                    so like.... can I turn the player around and "bounce" them off the forcefeild?
+                }
             }
+            if(Arenas.isInGame(from_arena)) player.sendMessage(ChatColor.LIGHT_PURPLE+"("+to_arena+" is currently in game)");
+            player.sendMessage(yellow+"You are now entering "+gold+to_arena);
         }
     }
     

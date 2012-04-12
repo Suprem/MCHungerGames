@@ -6,6 +6,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
+
 import com.acuddlyheadcrab.util.ConfigKeys;
 import com.acuddlyheadcrab.util.Utility;
 
@@ -146,4 +148,27 @@ public class Arenas {
         return null;
     }
     
+    public static boolean isTribute(String arenakey, Player player){
+        for(String trib : getTribs(arenakey))
+            if(Bukkit.getPlayer(trib)==null&&player.equals(Bukkit.getPlayer(trib))) return true;
+        return false;
+    }
+    
+    public static String getArenaByTrib(Player player){
+        for(String arenakey : Utility.getArenasKeys())
+            if(isTribute(arenakey, player)) return arenakey;
+        return null;
+    }
+    
+    public static boolean isGM(String arenakey, Player player){
+        for(String gm : getGMs(arenakey))
+            if(Bukkit.getPlayer(gm)==null&&player.equals(Bukkit.getPlayer(gm))) return true;
+        return false;
+    }
+    
+    public static String getArenaByGM(Player player){
+        for(String arenakey : Utility.getArenasKeys())
+            if(isGM(arenakey, player)) return arenakey;
+        return null;
+    }
 }
