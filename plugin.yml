@@ -1,0 +1,26 @@
+name: MCHungerGames
+main: com.acuddlyheadcrab.MCHungerGames.HungerGames
+version: 1.6 ALPHA
+description: >
+             A plugin template
+commands:
+    hungergames: #list cmds and version
+        description: Lists main commands and/or reload
+        usage: /<command> <reload>
+        aliases: [hg]
+    hgarena:
+        description: Manage arenas
+        usage: /<command> [info/new] [name]
+        aliases: [hga]
+    hgaedit:
+        description: Edit an arenas data in the config
+        usage: /<command> [parameter] [argument]
+        aliases: [hgae]
+    hggame:
+        description: Lists /hggame branch and currently ongoing games
+        usage: /<command> [start/stop <arena>]
+        aliases: [hgg]
+    spawnccp:
+        description: Spawn a cornucopia chest where you're looking
+        usage: /<command>
+        aliases: [spc]

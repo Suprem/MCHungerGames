@@ -1,0 +1,11 @@
+Options:
+    Debug:
+        onCommand: true
+    Gamemakers_can_edit: true
+    During_games:
+        kick_on_disconnect: false
+        noTeleporting: true
+        nearbyTributeChat: true
+        noMobSpawnInArena: false
+Currentgames: []
+Arenas:
