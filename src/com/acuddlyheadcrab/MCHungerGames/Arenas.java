@@ -3,6 +3,7 @@ package com.acuddlyheadcrab.MCHungerGames;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -70,6 +71,12 @@ public class Arenas {
         return config.getBoolean(getPathType(arenakey,"ingame"));
     }
     
+    public static void renameArena(String arenakey, String renameto){
+        submitNewArena(renameto, getCenter(arenakey), getMaxDist(arenakey), getGMs(arenakey), getTribs(arenakey), isInGame(arenakey));
+        deleteArena(arenakey);
+        hungergames.saveConfig();
+    }
+    
     public static void setCenter(String arenakey, Location loc){
         configSet(getPathType(arenakey, "center.world"), loc.getWorld().getName());
         configSet(getPathType(arenakey, "center.x"), loc.getX());
@@ -115,6 +122,9 @@ public class Arenas {
     
     public static void setInGame(String arenakey, boolean ingame){
         configSet(getPathType(arenakey, "ingame"), ingame);
+        List<String> currentgames = config.getStringList(ConfigKeys.CURRENT_GAMES.key());
+        if(ingame) currentgames.add(arenakey); else currentgames.remove(arenakey);
+        configSet(ConfigKeys.CURRENT_GAMES.key(), currentgames);
     }
     
     
@@ -170,5 +180,25 @@ public class Arenas {
         for(String arenakey : Utility.getArenasKeys())
             if(isGM(arenakey, player)) return arenakey;
         return null;
+    }
+
+    public static void tpAllOnlineTribs(String arenakey) {
+        for(String tribs : Arenas.getTribs(arenakey)){
+            Player trib = Bukkit.getPlayer(tribs);
+            try{
+                trib.teleport(Arenas.getCenter(arenakey));
+                trib.sendMessage(ChatColor.LIGHT_PURPLE+"You have been teleported to "+arenakey);
+            }catch(NullPointerException e){}
+        }
+    }
+    
+    public static void startGame(final String arenakey, int countdown){
+        Arenas.tpAllOnlineTribs(arenakey);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(hungergames, new Runnable() {
+            @Override
+            public void run() {
+                Arenas.setInGame(arenakey, true);
+            }
+        }, countdown*20);
     }
 }

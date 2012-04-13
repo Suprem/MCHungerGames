@@ -40,7 +40,9 @@ public class HGArenaCommand implements CommandExecutor{
                     hga_new = arg1.equalsIgnoreCase("new"),
                     hga_del = arg1.equalsIgnoreCase("del"),
                     hga_list = arg1.equalsIgnoreCase("list"),
-                    hga_tp = arg1.equalsIgnoreCase("tp")    
+                    hga_tp = arg1.equalsIgnoreCase("tp"),
+                    hga_tpall = arg1.equalsIgnoreCase("tpall")||arg1.equalsIgnoreCase("tpa"),
+                    hga_rename = arg1.equalsIgnoreCase("rename")
                 ;
                 
                 if(hga_info){
@@ -202,6 +204,43 @@ public class HGArenaCommand implements CommandExecutor{
                     } else PluginInfo.sendOnlyPlayerMsg(sender);
                 }
                 
+                if(hga_tpall){
+                    if(config.getBoolean(ConfigKeys.OPTS_DEBUG_ONCMD.key())) PluginInfo.sendPluginInfo("Attempted /hga tp command");
+                    if(sender.hasPermission(Perms.HGA_TPALL.perm())){
+                        try{
+                            String arenakey = Utility.getArenaByKey(args[1]);
+                            
+                            if(arenakey!=null){
+                                Arenas.tpAllOnlineTribs(arenakey);
+                                sender.sendMessage("Teleported all online tributes for "+arenakey);
+                                return true;
+                            } else PluginInfo.wrongFormatMsg(sender, "Could not find the arena \""+args[1]+"\""); return true;
+                        }catch(IndexOutOfBoundsException e){
+                            PluginInfo.wrongFormatMsg(sender, "/hga tpall <arena name>");
+                            return true;
+                        }
+                    } else PluginInfo.sendNoPermMsg(sender);
+                }
+                
+                if(hga_rename){
+                    if(config.getBoolean(ConfigKeys.OPTS_DEBUG_ONCMD.key())) PluginInfo.sendPluginInfo("Attempted /hga tp command");
+                    if(sender.hasPermission(Perms.HGA_RENAME.perm())){
+                        try{
+                            String 
+                                arenakey = Utility.getArenaByKey(args[1]),
+                                renameto = args[2]
+                            ;
+                            if(arenakey!=null){
+                                Arenas.renameArena(arenakey, renameto);
+                                sender.sendMessage(ChatColor.GREEN+"Renamed \""+arenakey+"\" to \""+renameto+"\"");
+                                return true;
+                            } else PluginInfo.wrongFormatMsg(sender, "Could not find the arena \""+args[1]+"\""); return true;
+                        }catch(IndexOutOfBoundsException e){
+                            PluginInfo.wrongFormatMsg(sender, "/hga rename <arena name> <rename to>");
+                            return true;
+                        }
+                    } else PluginInfo.sendNoPermMsg(sender); return true;
+                }
             }catch(IndexOutOfBoundsException e){}
             if(config.getBoolean(ConfigKeys.OPTS_DEBUG_ONCMD.key())) PluginInfo.sendPluginInfo("Attempted to show /hga branch help");
                 PluginInfo.sendCommandInfo(sender, "/hga", "");
@@ -210,6 +249,8 @@ public class HGArenaCommand implements CommandExecutor{
                 PluginInfo.sendCommandInfo(sender, "     del", "Delete an arena from the config");
                 PluginInfo.sendCommandInfo(sender, "     list", "Lists all arenas");
                 PluginInfo.sendCommandInfo(sender, "     tp", "Teleport to the cornucopia");
+                PluginInfo.sendCommandInfo(sender, "     tpall", "Teleport all tributes to the cornucopia");
+                PluginInfo.sendCommandInfo(sender, "     rename", "Rename an arena");
         }
         
         

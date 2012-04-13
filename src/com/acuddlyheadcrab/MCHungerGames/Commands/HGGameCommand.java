@@ -47,24 +47,22 @@ public class HGGameCommand implements CommandExecutor{
                     try{
                         String arg2 = args[1];
                         
-                        String arenakey = Utility.getArenaByKey(arg2);
+                        final String arenakey = Utility.getArenaByKey(arg2);
                         
                         if(arenakey!=null){
                             if(sender.hasPermission(Perms.HGG_START.perm())||Utility.isGameMakersArena(sender, arenakey)){
 
                                 
                                 try{
-                                    final int arg3 = Integer.parseInt(args[2]);
+                                    final int countdown = Integer.parseInt(args[2]);
                                     final ChatColor color = ChatColor.YELLOW;
                                     
-                                    Bukkit.broadcastMessage(color+"Hunger Games are starting in the arena "+arenakey+" in "+arg3+" seconds");
+                                    Bukkit.broadcastMessage(color+"Hunger Games are starting in the arena "+arenakey+" in "+countdown+" seconds");
                                     
                                     try{
-                                        Arenas.setInGame(arenakey, true);
-                                        List<String> games = config.getStringList(ConfigKeys.CURRENT_GAMES.key());
-                                        games.add(arenakey);
-                                        Arenas.configSet(ConfigKeys.CURRENT_GAMES.key(), games);
+                                        Arenas.startGame(arenakey, countdown);
                                         return true;
+//                                        the following probably wont happen (right now)
                                     }catch(NullPointerException e){
                                         PluginInfo.wrongFormatMsg(sender, arenakey+" does not have enough data to start a game");
                                     }
@@ -91,9 +89,9 @@ public class HGGameCommand implements CommandExecutor{
                                 List<String> games = config.getStringList(ConfigKeys.CURRENT_GAMES.key());
                                 games.remove(arenakey);
                                 Arenas.configSet(ConfigKeys.CURRENT_GAMES.key(), games);
-                                
+                                sender.sendMessage(ChatColor.LIGHT_PURPLE+"Force stopped game in "+arenakey);
                             } else PluginInfo.sendNoPermMsg(sender);
-                        } else PluginInfo.wrongFormatMsg(sender, "Could not find the arena \""+arg1+"\"");
+                        } else PluginInfo.wrongFormatMsg(sender, "Could not find the arena \""+arg2+"\"");
                     }catch(IndexOutOfBoundsException e){}
                 }
             }catch(IndexOutOfBoundsException e){

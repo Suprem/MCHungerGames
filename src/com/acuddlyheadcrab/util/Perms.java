@@ -6,10 +6,12 @@ public enum Perms {
     HG_RELOAD("HG.reload"),
     
     HGA_TP("HG.arena.tp"),
+    HGA_TPALL("HG.arena.tpall"),
     HGA_INFO("HG.arena.info"),
     HGA_NEW("HG.arena.new"),
     HGA_DEL("HG.arena.del"),
     HGA_LIST("HG.arena.list"),
+    HGA_RENAME("HG.arena.rename"),
     
     HGAE_SETCCP("HG.edit.setcornucopia"),
     HGAE_LIMIT("HG.edit.limit"),

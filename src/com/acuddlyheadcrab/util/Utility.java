@@ -146,8 +146,13 @@ public class Utility {
 
 
     public static String concatArray(String[] array, String param) {
+        return concatList(Arrays.asList(array), param);
+    }
+
+
+    public static String concatList(List<String> list, String param) {
         String returnable = "";
-        for(String i : array)
+        for(String i : list)
             returnable = returnable.concat(param+i);
         return returnable;
     }
