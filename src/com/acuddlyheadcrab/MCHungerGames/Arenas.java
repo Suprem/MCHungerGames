@@ -162,7 +162,7 @@ public class Arenas {
     
     public static boolean isGM(String arenakey, Player player){
         for(String gm : getGMs(arenakey))
-            if(Bukkit.getPlayer(gm)==null&&player.equals(Bukkit.getPlayer(gm))) return true;
+            if(Bukkit.getPlayer(gm)!=null&&player.equals(Bukkit.getPlayer(gm))) return true;
         return false;
     }
     
