@@ -9,6 +9,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.entity.PlayerDeathEvent.PlayerDeathEvent;
 import org.bukkit.util.Vector;
 
 public class HGListener implements Listener {
@@ -16,6 +17,22 @@ public class HGListener implements Listener {
     public HGListener(HungerGames instance) {plugin = instance;}
     
     public static FileConfiguration config;
+    
+    
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onPlayerDeath(PlayerDeathEvent event){
+        Player player = event.getPlayer();
+        String arena = Arenas.getNearbyArena(player.getLocation());
+        if(arena!=null){
+            if(Areans.isInGame(arena)){
+                if(isTribute(arena, player){
+                    Arenas.removeTrib(arena, player.getName());
+                    // replace with broadcast to non-tributes
+                    Bukkit.broadcastMessage(ChatColor.LIGHT_PURPLE+player.getName()+" has died!")
+                }
+            }
+        }
+    }
     
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerTP(PlayerTeleportEvent event){
