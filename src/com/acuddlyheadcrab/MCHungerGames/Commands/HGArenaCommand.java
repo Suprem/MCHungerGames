@@ -1,4 +1,4 @@
-package com.acuddlyheadcrab.MCHungerGames.Commands;
+package com.acuddlyheadcrab.MCHungerGames.commands;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
