@@ -4,11 +4,11 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.acuddlyheadcrab.MCHungerGames.Commands.CornucopiaCommand;
-import com.acuddlyheadcrab.MCHungerGames.Commands.HGArenaCommand;
-import com.acuddlyheadcrab.MCHungerGames.Commands.HGArenaEditCommand;
-import com.acuddlyheadcrab.MCHungerGames.Commands.HGGameCommand;
-import com.acuddlyheadcrab.MCHungerGames.Commands.HungerGamesCommand;
+import com.acuddlyheadcrab.MCHungerGames.commands.CornucopiaCommand;
+import com.acuddlyheadcrab.MCHungerGames.commands.HGArenaCommand;
+import com.acuddlyheadcrab.MCHungerGames.commands.HGArenaEditCommand;
+import com.acuddlyheadcrab.MCHungerGames.commands.HGGameCommand;
+import com.acuddlyheadcrab.MCHungerGames.commands.HungerGamesCommand;
 import com.acuddlyheadcrab.util.PluginInfo;
 import com.acuddlyheadcrab.util.Utility;
 
@@ -18,7 +18,8 @@ public class HungerGames extends JavaPlugin {
     public static PluginDescriptionFile plugdes;
     public static FileConfiguration config;
     
-    public HGListener hglistener = new HGListener(this);
+    public CraftListener craftlistener = new CraftListener(this);
+    public HungerListener hungerlistener = new HungerListener(this);
     public PluginInfo pluginIO = new PluginInfo(this);
     public Utility util = new Utility(this);
     public Arenas arenas = new Arenas(this);
@@ -30,7 +31,8 @@ public class HungerGames extends JavaPlugin {
         Arenas.initConfig();
         plugdes = getDescription();
         System.out.println("PLUGDESC NAME: "+plugdes.getName());
-        getServer().getPluginManager().registerEvents(hglistener, this);
+        getServer().getPluginManager().registerEvents(craftlistener, this);
+        getServer().getPluginManager().registerEvents(hungerlistener, this);
     }
     
     @Override

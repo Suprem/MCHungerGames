@@ -1,5 +1,6 @@
 package com.acuddlyheadcrab.MCHungerGames;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -7,28 +8,30 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.event.entity.PlayerDeathEvent.PlayerDeathEvent;
-import org.bukkit.util.Vector;
 
-public class HGListener implements Listener {
+import com.acuddlyheadcrab.util.Utility;
+
+
+public class HungerListener implements Listener {
     public static HungerGames plugin;
-    public HGListener(HungerGames instance) {plugin = instance;}
+    public static EventPriority priority;
+    public HungerListener(HungerGames instance) {plugin = instance;}
     
     public static FileConfiguration config;
     
-    
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerDeath(PlayerDeathEvent event){
-        Player player = event.getPlayer();
+        Player player = event.getEntity();
         String arena = Arenas.getNearbyArena(player.getLocation());
         if(arena!=null){
-            if(Areans.isInGame(arena)){
-                if(isTribute(arena, player){
+            if(Arenas.isInGame(arena)){
+                if(Arenas.isTribute(arena, player)){
                     Arenas.removeTrib(arena, player.getName());
                     // replace with broadcast to non-tributes
-                    Bukkit.broadcastMessage(ChatColor.LIGHT_PURPLE+player.getName()+" has died!")
+                    Bukkit.broadcastMessage(ChatColor.LIGHT_PURPLE+player.getName()+" has died!");
                 }
             }
         }
@@ -109,7 +112,7 @@ public class HGListener implements Listener {
                     player.sendMessage(red+"You are not allowed to leave "+from_arena+"!");
                     event.setCancelled(true);
                     player.teleport(from);
-                    repelPlayer(player, to);
+                    Utility.repelPlayer(player);
                     return;
                 }
                 player.sendMessage(ChatColor.LIGHT_PURPLE+"("+to_arena+" is currently in game)");
@@ -123,7 +126,7 @@ public class HGListener implements Listener {
                     player.sendMessage(red+"You are not allowed to enter "+to_arena+"!");
                     event.setCancelled(true);
                     player.teleport(from);
-                    repelPlayer(player, to);
+                    Utility.repelPlayer(player);
                     return;
                 }
                 player.sendMessage(ChatColor.LIGHT_PURPLE+"("+to_arena+" is currently in game)");
@@ -132,10 +135,4 @@ public class HGListener implements Listener {
         }
     }
     
-    public void repelPlayer(Player player, Location repulsive){
-        Location ploc = player.getLocation();
-        Vector reverse = ploc.getDirection().multiply(-1);
-//        bug: if the player is looking away from the boundry, they will be psuhed back into the boundry when they hit it.
-        player.setVelocity(reverse);
-    }
 }

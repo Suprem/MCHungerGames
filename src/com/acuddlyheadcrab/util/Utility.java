@@ -18,6 +18,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
 import com.acuddlyheadcrab.MCHungerGames.HungerGames;
 
@@ -155,6 +156,13 @@ public class Utility {
         for(String i : list)
             returnable = returnable.concat(param+i);
         return returnable;
+    }
+    
+    public static void repelPlayer(Player player){
+        Location ploc = player.getLocation();
+        Vector reverse = ploc.getDirection().multiply(-1.5);
+//        bug: if the player is looking away from the boundry, they will be pushed back into the boundry when they hit it.
+        player.setVelocity(reverse);
     }
     
 }
