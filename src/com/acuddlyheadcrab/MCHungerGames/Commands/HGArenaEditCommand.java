@@ -84,9 +84,11 @@ public class HGArenaEditCommand implements CommandExecutor{
                                     String arg3 = args[2];
                                     
                                     try{
-                                    	Arenas.addGM(arenakey, arg3);
-                                        sender.sendMessage(ChatColor.GREEN+"Added "+arg3+" to "+arenakey+"'s gamemakers");
-                                        return true;
+                                        if(!Arenas.getGMs(arenakey).contains(arg3)){
+                                            Arenas.addGM(arenakey, arg3);
+                                            sender.sendMessage(ChatColor.GREEN+"Added "+arg3+" to "+arenakey+"'s gamemakers");
+                                            return true;
+                                        } else PluginInfo.wrongFormatMsg(sender, arg3+" is already a gamemaker for "+arenakey+"!"); return true;
                                     }catch(NullPointerException e){
                                         PluginInfo.wrongFormatMsg(sender, "Could not find the player \""+arg3+"\""); return true;
                                     }
@@ -103,9 +105,11 @@ public class HGArenaEditCommand implements CommandExecutor{
                                     String arg3 = args[2];
                                     
                                     try{
-                                    	Arenas.addTrib(arenakey, arg3);
-                                        sender.sendMessage(ChatColor.GREEN+"Added "+arg3+" to "+arenakey+"'s tributes");
-                                         return true;
+                                        if(!Arenas.getTribs(arenakey).contains(arg3)){
+                                            Arenas.addTrib(arenakey, arg3);
+                                            sender.sendMessage(ChatColor.GREEN+"Added "+arg3+" to "+arenakey+"'s tributes");
+                                             return true;
+                                        } else PluginInfo.wrongFormatMsg(sender, arg3+" is already a tribute for "+arenakey+"!"); return true;
                                     }catch(NullPointerException e){
                                         PluginInfo.wrongFormatMsg(sender, "Could not find the player \""+arg3+"\""); return true;
                                     }
@@ -122,9 +126,11 @@ public class HGArenaEditCommand implements CommandExecutor{
                                     String arg3 = args[2];
                                     
                                     try{
-                                        Arenas.removeGM(arenakey, arg3);
-                                        sender.sendMessage(ChatColor.GREEN+"Removed "+arg3+" from "+arenakey+"'s gamemakers");
-                                         return true;
+                                        if(Arenas.getGMs(arenakey).contains(arg3)){
+                                            Arenas.removeGM(arenakey, arg3);
+                                            sender.sendMessage(ChatColor.GREEN+"Removed "+arg3+" from "+arenakey+"'s gamemakers");
+                                             return true;
+                                        } else PluginInfo.wrongFormatMsg(sender, arg3+" has already been removed from "+arenakey+"'s gamemakers!"); return true;
                                     }catch(NullPointerException e){
                                         PluginInfo.wrongFormatMsg(sender, "Could not find the player \""+arg3+"\""); return true;
                                     }
@@ -141,9 +147,11 @@ public class HGArenaEditCommand implements CommandExecutor{
                                     String arg3 = args[2];
                                     
                                     try{
-                                        Arenas.removeTrib(arenakey, arg3);
-                                        sender.sendMessage(ChatColor.GREEN+"Removed "+arg3+" from "+arenakey+"'s tributes");
-                                         return true;
+                                        if(Arenas.getTribs(arenakey).contains(arg3)){
+                                            Arenas.removeTrib(arenakey, arg3);
+                                            sender.sendMessage(ChatColor.GREEN+"Removed "+arg3+" from "+arenakey+"'s tributes");
+                                             return true;
+                                        } else PluginInfo.wrongFormatMsg(sender, arg3+" has already been removed from "+arenakey+"'s tributes!"); return true;
                                     }catch(NullPointerException e){
                                         PluginInfo.wrongFormatMsg(sender, "Could not find the player \""+arg3+"\""); return true;
                                     }
