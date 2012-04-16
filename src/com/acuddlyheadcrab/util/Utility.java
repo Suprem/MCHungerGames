@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -158,11 +159,37 @@ public class Utility {
         return returnable;
     }
     
-    public static void repelPlayer(Player player){
+    public static void repelPlayer(Player player, Location repulsive, int force){
         Location ploc = player.getLocation();
-        Vector reverse = ploc.getDirection().multiply(-1.5);
+        Vector 
+            direction = ploc.toVector().subtract(repulsive.toVector()),
+            reverse = direction.multiply(force)
+        ;
 //        bug: if the player is looking away from the boundry, they will be pushed back into the boundry when they hit it.
         player.setVelocity(reverse);
+    }
+    
+    public static Location getRandomChunkLocation(Location origin, double distance){
+        Random rand = new Random();
+        Block block = null;
+        for(int c=0;c<20;){
+            block = origin.getWorld().getHighestBlockAt(
+                origin.getChunk().getBlock(
+                    rand.nextInt(16),
+                    origin.getBlockY(),
+                    rand.nextInt(16)
+                ).getLocation()
+            );
+            if(block.getLocation().distance(origin)==distance) break; else c++;
+        }
+        return block.getWorld().getHighestBlockAt(block.getLocation()).getLocation();
+    }
+    
+    public static List<Location> getRandomChunkLocs(Location origin, int x){
+        List<Location> loclist = new ArrayList<Location>();
+        for(int c=0;c<x;c++)
+            loclist.add(getRandomChunkLocation(origin, 10));
+        return loclist;
     }
     
 }

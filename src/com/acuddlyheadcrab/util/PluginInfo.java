@@ -19,7 +19,7 @@ public class PluginInfo {
     
     public static final boolean debug = true;
     
-    private static ChatColor red = ChatColor.RED;
+    private static ChatColor red = ChatColor.DARK_PURPLE;
     private static ChatColor aqua = ChatColor.AQUA;
     private static ChatColor gray = ChatColor.GRAY;
     
@@ -43,13 +43,17 @@ public class PluginInfo {
         sender.sendMessage(red + "You must be a player to do this!");
     }
     
+    public static void sendAlreadyInGameMsg(CommandSender sender, String arena) {
+        sender.sendMessage(red + arena+"is currently in game!");
+    }
+    
     public static void sendCommandInfo(CommandSender sender, String cmd, String desc){
         sender.sendMessage(red+cmd+gray+": "+desc);
     }
     
     public static void sendCommandsHelp(CommandSender sender) {
         String v = plugin.getDescription().getVersion();
-        sendTestMsg(sender, aqua + "    MC Hunger Games v" + v);
+        sender.sendMessage(aqua + "    MC Hunger Games v" + v);
         Map<String, String> cmd_map = Utility.getCommandsAndDescs();
         for (String cmd : cmd_map.keySet()) {
             String desc = cmd_map.get(cmd);

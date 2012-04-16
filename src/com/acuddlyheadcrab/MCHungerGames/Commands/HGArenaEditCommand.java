@@ -50,6 +50,8 @@ public class HGArenaEditCommand implements CommandExecutor{
                             removetrib = arg2.equalsIgnoreCase("removetrib")
                         ;
                         
+                        if(Arenas.isInGame(arenakey)||Arenas.isInCountdown(arenakey)){PluginInfo.sendAlreadyInGameMsg(sender, arenakey); return true;}
+                        
                         if(setccp){
                             if(config.getBoolean(ConfigKeys.OPTS_DEBUG_ONCMD.key())) PluginInfo.sendPluginInfo("Attempted /hgae <arena> setccp command");
                             if(sender.hasPermission(Perms.HGAE_SETCCP.perm())||Utility.isGameMakersArena(sender, arenakey)){
@@ -85,6 +87,9 @@ public class HGArenaEditCommand implements CommandExecutor{
                                     
                                     try{
                                         if(!Arenas.getGMs(arenakey).contains(arg3)){
+                                            if(Arenas.getTribs(arenakey).contains(arg3)){
+                                                sender.sendMessage(ChatColor.LIGHT_PURPLE+""+ChatColor.ITALIC+"Warning: "+arg3+" is already a tribute for "+arenakey+"!");
+                                            }
                                             Arenas.addGM(arenakey, arg3);
                                             sender.sendMessage(ChatColor.GREEN+"Added "+arg3+" to "+arenakey+"'s gamemakers");
                                             return true;
@@ -106,6 +111,9 @@ public class HGArenaEditCommand implements CommandExecutor{
                                     
                                     try{
                                         if(!Arenas.getTribs(arenakey).contains(arg3)){
+                                            if(Arenas.getGMs(arenakey).contains(arg3)){
+                                                sender.sendMessage(ChatColor.LIGHT_PURPLE+""+ChatColor.ITALIC+"Warning: "+arg3+" is already a gamemaker for "+arenakey+"!");
+                                            }
                                             Arenas.addTrib(arenakey, arg3);
                                             sender.sendMessage(ChatColor.GREEN+"Added "+arg3+" to "+arenakey+"'s tributes");
                                              return true;

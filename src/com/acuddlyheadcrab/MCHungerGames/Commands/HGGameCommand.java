@@ -65,14 +65,16 @@ public class HGGameCommand implements CommandExecutor{
 //                                        the following probably wont happen (right now)
                                     }catch(NullPointerException e){
                                         PluginInfo.wrongFormatMsg(sender, arenakey+" does not have enough data to start a game");
+                                        e.printStackTrace();
+                                        return true;
                                     }
-                                    return true;
                                 }catch(IndexOutOfBoundsException e){
-                                    PluginInfo.wrongFormatMsg(sender, "/hgg start <arena> [countdown (seconds]");
+                                    PluginInfo.wrongFormatMsg(sender, "/hgg start <arena> [countdown (seconds]"); return true;
                                 }
                             } else PluginInfo.sendNoPermMsg(sender);
                         } else PluginInfo.wrongFormatMsg(sender, "Could not find the arena \""+arg2+"\"");
                     }catch(IndexOutOfBoundsException e){PluginInfo.wrongFormatMsg(sender, "/hgg start <arena> [countdown (seconds]");}
+                    return true;
                 }
                 
                 if(stop){
@@ -92,16 +94,20 @@ public class HGGameCommand implements CommandExecutor{
                                 sender.sendMessage(ChatColor.LIGHT_PURPLE+"Force stopped game in "+arenakey);
                             } else PluginInfo.sendNoPermMsg(sender);
                         } else PluginInfo.wrongFormatMsg(sender, "Could not find the arena \""+arg2+"\"");
-                    }catch(IndexOutOfBoundsException e){}
+                    }catch(IndexOutOfBoundsException e){PluginInfo.wrongFormatMsg(sender, "/hgg stop <arena>");}
+                    return true;
                 }
+                
+                PluginInfo.sendCommandInfo(sender, "/hgg", "");
+                PluginInfo.sendCommandInfo(sender, "    start <arena>", "Starts a game");
+                PluginInfo.sendCommandInfo(sender, "    stop <arena>", "Stops an ongoing game");
+                
             }catch(IndexOutOfBoundsException e){
                 String cur_games = config.getString(ConfigKeys.CURRENT_GAMES.key());
                 cur_games = cur_games.trim();
                 if(cur_games==""||cur_games=="[]"){
                     cur_games = ChatColor.DARK_GRAY+"(none)";
                 }
-                PluginInfo.sendCommandInfo(sender, "    /hgg start <arena>", "Starts a game");
-                PluginInfo.sendCommandInfo(sender, "    /hgg stop <arena>", "Stops an ongoing game");
                 sender.sendMessage(ChatColor.GOLD+"Current Games: "+cur_games);
             }
         }

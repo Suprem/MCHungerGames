@@ -35,7 +35,6 @@ public class HungerGamesCommand implements CommandExecutor{
                     if(config.getBoolean(ConfigKeys.OPTS_DEBUG_ONCMD.key())) PluginInfo.sendPluginInfo("Attempted /hg reload command");
                     if(sender.hasPermission(Perms.HG_RELOAD.perm())){
                         hungergames.saveConfig();
-                        hungergames.reloadConfig();
                         PluginInfo.sendPluginInfo("reloaded by "+sender.getName());
                         sender.sendMessage(ChatColor.GREEN+"Reloaded MCHungerGames");
                     } else PluginInfo.sendNoPermMsg(sender);

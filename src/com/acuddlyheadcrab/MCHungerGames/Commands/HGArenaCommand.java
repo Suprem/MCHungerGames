@@ -1,5 +1,7 @@
 package com.acuddlyheadcrab.MCHungerGames.commands;
 
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -231,7 +233,16 @@ public class HGArenaCommand implements CommandExecutor{
                                 renameto = args[2]
                             ;
                             if(arenakey!=null){
+                                List<String> cur_games = config.getStringList(ConfigKeys.CURRENT_GAMES.key());
+                                for(String game : cur_games){
+                                    if(game.equalsIgnoreCase(renameto)){
+                                        cur_games.remove(game);
+                                        cur_games.add(renameto);
+                                    }
+                                }
+                                Arenas.configSet(ConfigKeys.CURRENT_GAMES.key(), cur_games);
                                 Arenas.renameArena(arenakey, renameto);
+                                
                                 sender.sendMessage(ChatColor.GREEN+"Renamed \""+arenakey+"\" to \""+renameto+"\"");
                                 return true;
                             } else PluginInfo.wrongFormatMsg(sender, "Could not find the arena \""+args[1]+"\""); return true;

@@ -13,6 +13,13 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import com.acuddlyheadcrab.MCHungerGames.events.*;
 import com.acuddlyheadcrab.util.*;
 
+/**
+ * @author acuddlyheadcrab
+ * 
+ * This class is deprecated and unused.
+ *
+ */
+
 public class CraftListener implements Listener {
     public static HungerGames plugin;
     public static EventPriority priority;

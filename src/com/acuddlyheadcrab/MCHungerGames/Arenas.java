@@ -1,9 +1,10 @@
 package com.acuddlyheadcrab.MCHungerGames;
 
+import java.util.ArrayList;
 import java.util.List;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -63,8 +64,30 @@ public class Arenas {
         return config.getStringList(getPathType(arenakey, "gms"));
     }
     
+    public static List<Player> getOnlineGMs(String arenakey){
+        List<Player> onlinegms = new ArrayList<Player>();
+        for(String gm_s : getGMs(arenakey)){
+            try{
+                Player player = Bukkit.getPlayer(gm_s); 
+                if(player!=null) onlinegms.add(player);
+            }catch(NullPointerException e){}
+        }
+        return onlinegms;
+    }
+    
     public static List<String> getTribs(String arenakey){
         return config.getStringList(getPathType(arenakey, "tribs"));
+    }
+    
+    public static List<Player> getOnlineTribs(String arenakey){
+        List<Player> onlinetribs = new ArrayList<Player>();
+        for(String trib_s : getTribs(arenakey)){
+            try{
+                Player player = Bukkit.getPlayer(trib_s); 
+                if(player!=null) onlinetribs.add(player);
+            }catch(NullPointerException e){}
+        }
+        return onlinetribs;
     }
     
     public static boolean isInGame(String arenakey){
@@ -143,6 +166,7 @@ public class Arenas {
         if(type.equalsIgnoreCase("gms"))return arenapath+ConfigKeys.ARN_GMS.key();
         if(type.equalsIgnoreCase("tribs"))return arenapath+ConfigKeys.ARN_TRIBS.key();
         if(type.equalsIgnoreCase("ingame"))return arenapath+ConfigKeys.ARN_INGAME.key();
+        if(type.equalsIgnoreCase("countdown"))return arenapath+ConfigKeys.ARN_INCOUNTDOWN.key();
         if(type.equalsIgnoreCase("self")) return arenapath;
         return null;
     }
@@ -160,7 +184,7 @@ public class Arenas {
     
     public static boolean isTribute(String arenakey, Player player){
         for(String trib : getTribs(arenakey))
-            if(Bukkit.getPlayer(trib)==null&&player.equals(Bukkit.getPlayer(trib))) return true;
+            if(Bukkit.getPlayer(trib)!=null&&player.equals(Bukkit.getPlayer(trib))) return true;
         return false;
     }
     
@@ -183,22 +207,84 @@ public class Arenas {
     }
 
     public static void tpAllOnlineTribs(String arenakey) {
-        for(String tribs : Arenas.getTribs(arenakey)){
-            Player trib = Bukkit.getPlayer(tribs);
-            try{
-                trib.teleport(Arenas.getCenter(arenakey));
-                trib.sendMessage(ChatColor.LIGHT_PURPLE+"You have been teleported to "+arenakey);
-            }catch(NullPointerException e){}
+        for(Player trib : getOnlineTribs(arenakey)){
+//                TODO: add backup inventories with DAT file handling
+            Location 
+                center  = getCenter(arenakey), 
+                rand = Utility.getRandomChunkLocation(center, 5)
+            ;
+            
+            
+//            System.out.println("Trying to teleport "+trib.getName()+" to "+rand.getBlockX()+", "+rand.getBlockY()+", "+rand.getBlockZ());
+            System.out.println("Rand: "+rand);
+            System.out.println("Trib: "+trib);
+            trib.teleport(rand);
+            trib.getInventory().clear();
+            trib.setGameMode(GameMode.SURVIVAL);
+            trib.sendMessage(ChatColor.LIGHT_PURPLE+"You have been teleported to "+arenakey);
         }
     }
     
     public static void startGame(final String arenakey, int countdown){
         Arenas.tpAllOnlineTribs(arenakey);
-        Bukkit.getScheduler().scheduleSyncDelayedTask(hungergames, new Runnable() {
+        configSet(ConfigKeys.GAME_COUNT.key(), getGameCount()+1);
+        startCountdown(arenakey, countdown);
+    }
+
+    public static int getGameCount() {
+        return config.getInt(ConfigKeys.GAME_COUNT.key());
+    }
+
+    public static void initGames() {
+        List<String> currentgames = config.getStringList(ConfigKeys.CURRENT_GAMES.key());
+//        checks for any extra games (aka removes unecessary)
+        for(int c=0;c<currentgames.size();c++){
+            String game = currentgames.get(c);
+            boolean contains = Utility.getArenasKeys().contains(game), ingame = Arenas.isInGame(game);
+            if(!contains||!ingame){
+                currentgames.remove(c);
+            }
+        }
+//        checks if any arenas are excluded (aka adds not included ones)
+        for(String arena : Utility.getArenasKeys()){
+            if(currentgames.contains(arena)){
+                if(!Arenas.isInGame(arena)) currentgames.remove(arena);
+            } else {
+                if(Arenas.isInGame(arena)) currentgames.add(arena);
+            }
+        }
+        configSet(ConfigKeys.CURRENT_GAMES.key(), currentgames);
+    }
+    
+    public static boolean isInCountdown(String arenakey){
+        return config.getInt(getPathType(arenakey, "countdown"))>0 &&
+            config.get(getPathType(arenakey, "countdown"))!=null
+        ;
+    }
+    
+    public static void startCountdown(final String arenakey, final int seconds){
+//        initialize path
+        System.out.println("Setting "+arenakey+" in countdown with "+seconds+" to go!");
+        config.set(getPathType(arenakey, "countdown"), seconds);
+//        cycle through each second
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(hungergames, new Runnable() {
             @Override
             public void run() {
-                Arenas.setInGame(arenakey, true);
+                int second = config.getInt(getPathType(arenakey, "countdown"));
+                Bukkit.broadcastMessage(ChatColor.LIGHT_PURPLE+"[MCHungerGames] "+second);
+                if(second==0){
+                    Bukkit.getScheduler().cancelTasks(hungergames);
+                    configSet(getPathType(arenakey, "countdown"), null);
+                    setInGame(arenakey, true);
+                    Bukkit.broadcastMessage(ChatColor.LIGHT_PURPLE+arenakey+" is now in game!");
+                } else countdown(arenakey);
             }
-        }, countdown*20);
+        }, 20, 20);
+//        set arean in game here
+    }
+    
+    public static void countdown(String arenakey){
+        String path = getPathType(arenakey, "countdown");
+        configSet(path, config.getInt(path)-1);
     }
 }

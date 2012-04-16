@@ -1,7 +1,6 @@
 package com.acuddlyheadcrab.MCHungerGames;
 
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.acuddlyheadcrab.MCHungerGames.commands.CornucopiaCommand;
@@ -15,7 +14,6 @@ import com.acuddlyheadcrab.util.Utility;
 public class HungerGames extends JavaPlugin {
     
     public static HungerGames plugin;
-    public static PluginDescriptionFile plugdes;
     public static FileConfiguration config;
     
     public CraftListener craftlistener = new CraftListener(this);
@@ -29,8 +27,8 @@ public class HungerGames extends JavaPlugin {
         loadConfig();
         initCommands();
         Arenas.initConfig();
-        plugdes = getDescription();
-        System.out.println("PLUGDESC NAME: "+plugdes.getName());
+        Arenas.initGames();
+        HungerListener.initConfig();
         getServer().getPluginManager().registerEvents(craftlistener, this);
         getServer().getPluginManager().registerEvents(hungerlistener, this);
     }
