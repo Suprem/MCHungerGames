@@ -38,16 +38,18 @@ public class HungerListener implements Listener {
     @SuppressWarnings("unused")
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerChat(PlayerChatEvent event){
-        Player player = event.getPlayer();
-        String 
-            msg = event.getFormat(),
-            arenakey = Arenas.getArenaByTrib(player)
-        ;
-        
-        if(arenakey!=null&&Arenas.isInGame(arenakey)){
-            System.out.println("someone talked"); //this  works btw
+        event.setCancelled(true);
+        // I'm calling this talkingplayer to make this listener easier to understand
+        Player talkingplayer = event.getPlayer();
+        String format = event.getFormat();
+        Set<Player> recips = event.getRecipients();
+        for(Player recip : recips.iterator()){
+            switch(Utility.canHearMessage(recip, talkingplayer)){
+                case 1: trib.sendMessage(ChatColor.GRAY+""+ChatColor.MAGIC+format); break;
+                case 2: break;
+                default: trib.sendMessage(format); break;
+            }
         }
-        
     }
     
     @EventHandler(priority = EventPriority.HIGHEST)
