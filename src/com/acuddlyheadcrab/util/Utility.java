@@ -192,4 +192,24 @@ public class Utility {
         return loclist;
     }
     
+    public static int canHearMessage(Player talkingplayer, Player recip){
+        /**
+         * Yeah I know this is weird... Later, I will use an enum like 
+         * CLEAR, //0
+         * GARBLED, //1
+         * NOMSG; //2
+         **/
+        String arenakey = Arenas.getArenaByTrib(recip);
+        if(arenakey!=null){
+            if(Arenas.isInGame(arenakey)){
+                double distance = recip.getLocation().distance(talkingplayer.getLocation());
+                if(distance<=36){
+                    return 0;
+                } else if(distance<=42){
+                    return 1;
+                }
+            }
+        } else return 2;
+    }
+    
 }
