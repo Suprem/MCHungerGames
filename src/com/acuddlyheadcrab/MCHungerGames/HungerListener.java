@@ -35,6 +35,7 @@ public class HungerListener implements Listener {
         }
     }
     
+<<<<<<< HEAD
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerChat(PlayerChatEvent event){
 //        event.setCancelled(true);
@@ -49,6 +50,23 @@ public class HungerListener implements Listener {
 //            System.out.println("     "+recip.getName()+": "+Utility.getChatProximity(talkingplayer, recip));
 //            Utility.sendChatProxMessage(talkingplayer, recip, format);
 //        }
+=======
+    @SuppressWarnings("unused")
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onPlayerChat(PlayerChatEvent event){
+        event.setCancelled(true);
+        // I'm calling this talkingplayer to make this listener easier to understand
+        Player talkingplayer = event.getPlayer();
+        String format = event.getFormat();
+        Set<Player> recips = event.getRecipients();
+        for(Player recip : recips.iterator()){
+            switch(Utility.canHearMessage(recip, talkingplayer)){
+                case 1: trib.sendMessage(ChatColor.GRAY+""+ChatColor.MAGIC+format); break;
+                case 2: break;
+                default: trib.sendMessage(format); break;
+            }
+        }
+>>>>>>> 3a1fcf241cf70fef8f4771a629fb08d57e1b5b37
     }
     
     @EventHandler(priority = EventPriority.HIGHEST)

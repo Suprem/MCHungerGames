@@ -1,6 +1,10 @@
 name: MCHungerGames
 main: com.acuddlyheadcrab.MCHungerGames.HungerGames
+<<<<<<< HEAD
 version: 1.0 BETA
+=======
+version: 1.6 ALPHA
+>>>>>>> 3a1fcf241cf70fef8f4771a629fb08d57e1b5b37
 description: >
              A plugin template
 commands:

@@ -11,7 +11,10 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
+<<<<<<< HEAD
 import org.bukkit.ChatColor;
+=======
+>>>>>>> 3a1fcf241cf70fef8f4771a629fb08d57e1b5b37
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -22,7 +25,10 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+<<<<<<< HEAD
 import com.acuddlyheadcrab.MCHungerGames.Arenas;
+=======
+>>>>>>> 3a1fcf241cf70fef8f4771a629fb08d57e1b5b37
 import com.acuddlyheadcrab.MCHungerGames.HungerGames;
 
 
@@ -194,6 +200,7 @@ public class Utility {
         return loclist;
     }
     
+<<<<<<< HEAD
     public enum ChatProximity{
         SELF,
         GLOBAL,
@@ -227,3 +234,26 @@ public class Utility {
     }
     
 }
+=======
+    public static int canHearMessage(Player talkingplayer, Player recip){
+        /**
+         * Yeah I know this is weird... Later, I will use an enum like 
+         * CLEAR, //0
+         * GARBLED, //1
+         * NOMSG; //2
+         **/
+        String arenakey = Arenas.getArenaByTrib(recip);
+        if(arenakey!=null){
+            if(Arenas.isInGame(arenakey)){
+                double distance = recip.getLocation().distance(talkingplayer.getLocation());
+                if(distance<=36){
+                    return 0;
+                } else if(distance<=42){
+                    return 1;
+                }
+            }
+        } else return 2;
+    }
+    
+}
+>>>>>>> 3a1fcf241cf70fef8f4771a629fb08d57e1b5b37
